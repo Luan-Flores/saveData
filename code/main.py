@@ -1,5 +1,6 @@
-import sys, json
-from PyQt5 import QtWidgets, Qtcore
+import sys
+import json
+from PyQt5 import QtWidgets, QtCore
 from screen import Ui_MainWindow
 
 class Main(QtWidgets.QMainWindow):
@@ -9,7 +10,7 @@ class Main(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.ui.salvarJogo.clicked.connect(self.salvarJogo)
-        self.ui.sair.clicked.connect(self.sair)
+        self.ui.sair.clicked.connect(self.close)
         self.ui.carregarJogo.clicked.connect(self.carregarJogo)
         self.ui.novoJogo.clicked.connect(self.novoJogo)
         
@@ -19,13 +20,13 @@ class Main(QtWidgets.QMainWindow):
         self.ui.lineAltura.clear()
         self.ui.checkF.setChecked(False)
         self.ui.checkM.setChecked(False)
-        self.ui.dateEdit.setDate(Qtcore.QDate.currentDate())
+        self.ui.dateEdit.setDate(QtCore.QDate.currentDate())
         
     def novoJogo(self):
         self.clear()
         QtWidgets.QMessageBox.information(self, "Novo jogo", "Novo jogo iniciado!")
     
-    def salvarGame(self):
+    def salvarJogo(self):
         
         data = {
             "nome" : self.ui.lineNome.text(),
@@ -53,7 +54,7 @@ class Main(QtWidgets.QMainWindow):
         else:
             QtWidgets.QMessageBox.warning(self, "Erro", "Nenhum arquivo selecionado ")
 
-    def carregarGame(self):
+    def carregarJogo(self):
         file_path, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Carregar jogo", "", "Arquivos JSON (*.json)")
         
         if file_path:
@@ -63,7 +64,7 @@ class Main(QtWidgets.QMainWindow):
                     data = json.load(file)
                     
                     self.ui.lineNome.setText(data.get("nome", ""))
-                    self.ui.dateEdit.setDate(QtCore.Qdate.fromString(data.get("data", "2000-01-01"), "yyyy-MM-dd"))
+                    self.ui.dateEdit.setDate(QtCore.QDate.fromString(data.get("data_nascimento", "2000-01-01"), "yyyy-MM-dd"))
                     self.ui.lineIdade.setText(data.get("idade", ""))
                     self.ui.lineAltura.setText(data.get("altura", ""))
 
